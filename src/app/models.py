@@ -35,6 +35,7 @@ class IsxApplication(Base):
     configuration = Column(JSONB(astext_type=Text()))
     last_modified = Column(DateTime)
     is_enabled = Column(Boolean, index=True)
+    is_soft_deleted = Column(Boolean)
 
 
 # -----------------------------------------------------------------------------
@@ -119,6 +120,7 @@ class IsxIdentity(Base):
     created = Column(DateTime)
     last_modified = Column(DateTime)
     disabled = Column(Boolean)
+    is_soft_deleted = Column(Boolean)
     type = Column(ForeignKey('isx_identity_type.type_name'), nullable=False)
 
     isx_identity_type = relationship('IsxIdentityType')
