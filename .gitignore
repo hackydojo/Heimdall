@@ -126,4 +126,5 @@ dmypy.json
 env.sh
 secrets.yaml
 secrets.yml
+test_report.xml
 
