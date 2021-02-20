@@ -17,6 +17,9 @@ def _get_date():
 
 Base = declarative_base()
 metadata = Base.metadata
+ISX_APPLICATION_ID = "isx_application.application_id"
+ISX_IDENTITY_ID = 'isx_identity.identity_id'
+
 
 # -----------------------------------------------------------------------------
 # TABLE ISX Application
@@ -71,7 +74,7 @@ class IsxApplicationProvider(Base):
     __tablename__ = 'isx_application_provider'
 
     provider_id = Column(ForeignKey('isx_claims_provider.provider_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
-    application_id = Column(ForeignKey('isx_application.application_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    application_id = Column(ForeignKey(ISX_APPLICATION_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
     created = Column(DateTime)
 
     application = relationship('IsxApplication')
@@ -85,7 +88,7 @@ class IsxClaim(Base):
     __tablename__ = 'isx_claim'
 
     claim_id = Column(UUID, primary_key=True, nullable=False)
-    application_id = Column(ForeignKey('isx_application.application_id', ondelete='CASCADE'), primary_key=True, nullable=False)
+    application_id = Column(ForeignKey(ISX_APPLICATION_ID, ondelete='CASCADE'), primary_key=True, nullable=False)
     value = Column(String(512), index=True)
     description = Column(String(256))
 
@@ -100,7 +103,7 @@ class IsxGroup(Base):
     __tablename__ = 'isx_group'
 
     group_id = Column(UUID, primary_key=True, nullable=False)
-    application_id = Column(ForeignKey('isx_application.application_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    application_id = Column(ForeignKey(ISX_APPLICATION_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
     name = Column(String(40), nullable=False)
     description = Column(String(256))
     properties = Column(JSONB(astext_type=Text()))
@@ -132,8 +135,8 @@ class IsxIdentity(Base):
 class IsxApplicationIdentity(Base):
     __tablename__ = 'isx_application_identity'
 
-    identity_id = Column(ForeignKey('isx_identity.identity_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
-    application_id = Column(ForeignKey('isx_application.application_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    identity_id = Column(ForeignKey(ISX_IDENTITY_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    application_id = Column(ForeignKey(ISX_APPLICATION_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
     created = Column(DateTime)
 
     application = relationship('IsxApplication')
@@ -146,8 +149,8 @@ class IsxApplicationIdentity(Base):
 class IsxApplicationOwnership(Base):
     __tablename__ = 'isx_application_ownership'
 
-    identity_id = Column(ForeignKey('isx_identity.identity_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
-    application_id = Column(ForeignKey('isx_application.application_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    identity_id = Column(ForeignKey(ISX_IDENTITY_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    application_id = Column(ForeignKey(ISX_APPLICATION_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
     created = Column(DateTime)
     from_date = Column(DateTime)
     until_date = Column(DateTime)
@@ -171,7 +174,7 @@ class IsxGroupClaim(Base):
 
     group_id = Column(UUID, primary_key=True, nullable=False, index=True)
     claim_id = Column(UUID, primary_key=True, nullable=False, index=True)
-    application_id = Column(ForeignKey('isx_application.application_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    application_id = Column(ForeignKey(ISX_APPLICATION_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
 
     application = relationship('IsxApplication')
     claim = relationship('IsxClaim')
@@ -189,7 +192,7 @@ class IsxIdentityClaim(Base):
 
     claim_id = Column(UUID, primary_key=True, nullable=False, index=True)
     application_id = Column(UUID, primary_key=True, nullable=False, index=True)
-    identity_id = Column(ForeignKey('isx_identity.identity_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    identity_id = Column(ForeignKey(ISX_IDENTITY_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
     from_date = Column(DateTime)
     until_date = Column(DateTime)
 
@@ -207,8 +210,8 @@ class IsxIdentityGroup(Base):
     )
 
     group_id = Column(UUID, primary_key=True, nullable=False, index=True)
-    application_id = Column(ForeignKey('isx_application.application_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
-    identity_id = Column(ForeignKey('isx_identity.identity_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    application_id = Column(ForeignKey(ISX_APPLICATION_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    identity_id = Column(ForeignKey(ISX_IDENTITY_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
 
     application = relationship('IsxApplication')
     group = relationship('IsxGroup')
@@ -221,8 +224,8 @@ class IsxIdentityGroup(Base):
 class IsxProfile(Base):
     __tablename__ = 'isx_profile'
 
-    identity_id = Column(ForeignKey('isx_identity.identity_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
-    application_id = Column(ForeignKey('isx_application.application_id', ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    identity_id = Column(ForeignKey(ISX_IDENTITY_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
+    application_id = Column(ForeignKey(ISX_APPLICATION_ID, ondelete='CASCADE'), primary_key=True, nullable=False, index=True)
     profile_data = Column(JSONB(astext_type=Text()))
 
     application = relationship('IsxApplication')

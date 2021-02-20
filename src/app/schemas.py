@@ -3,13 +3,17 @@ import uuid
 from datetime import datetime
 from pydantic import Schema, BaseModel, Field
 
+CLAIM_ID = "Unique identifier for a claim"
+IDENTITY_ID = "Unique identifier for an Identity"
+APPLICATION_ID = "Unique identifier for an application"
+
 
 # -----------------------------------------------------------------------------
 # APPLICATION MODEL
 # -----------------------------------------------------------------------------
 class Application(BaseModel):
 
-    application_id: uuid.UUID = Field(None, title="Unique identifier for a given application")
+    application_id: uuid.UUID = Field(None, title=APPLICATION_ID)
     name: str = Field(None, title="Application name", max_length=40)
     description: str = Field(None, title="Application description", max_length=256)
     callback_url: str = Field(None, title="Callback URL where access token is returned after authorization", max_length=4000)
@@ -64,7 +68,7 @@ class ApplicationProvider(BaseModel):
 # -----------------------------------------------------------------------------
 class Claim(BaseModel):
 
-    claim_id: uuid.UUID = Field(None, title="Unique identifier for a claim")
+    claim_id: uuid.UUID = Field(None, title=CLAIM_ID)
     application_id: uuid.UUID = Field(None, title="Unique identifier for an application id")
     value: str = Field(None, title="Value for a claim", max_length=512)
     description: str = Field(None, title="Claim Description", max_length=256)
@@ -87,7 +91,7 @@ class Group(BaseModel):
 # -----------------------------------------------------------------------------
 class Identity(BaseModel):
 
-    identity_id: uuid.UUID = Field(None, title="Unique identifier for an Identity")
+    identity_id: uuid.UUID = Field(None, title=IDENTITY_ID)
     business_id: str = Field(None, title="Business Id", max_length=40)
     identity_data: dict = Field(None, title="Additional information for an Identity")
     created: datetime = Field(None, title="Timestamp when the Identity was created")
@@ -101,8 +105,8 @@ class Identity(BaseModel):
 # -----------------------------------------------------------------------------
 class ApplicationIdentity(BaseModel):
 
-    identity_id: uuid.UUID = Field(None, title="Unique identifier for an Identity")
-    application_id: uuid.UUID = Field(None, title="Unique identifier for an Application")
+    identity_id: uuid.UUID = Field(None, title=IDENTITY_ID)
+    application_id: uuid.UUID = Field(None, title=APPLICATION_ID)
     created: datetime = Field(None, title="Timestamp when the Application Identity was created")
 
 
@@ -111,8 +115,8 @@ class ApplicationIdentity(BaseModel):
 # -----------------------------------------------------------------------------
 class ApplicationOwnership(BaseModel):
 
-    identity_id: uuid.UUID = Field(None, title="Unique identifier for an Identity")
-    application_id: uuid.UUID = Field(None, title="Unique identifier for an Application")
+    identity_id: uuid.UUID = Field(None, title=IDENTITY_ID)
+    application_id: uuid.UUID = Field(None, title=APPLICATION_ID)
     created: datetime = Field(None, title="Timestamp when the Application Ownership was created")
     from_date: datetime = Field(None, title="Timestamp for when Application Ownership validity starts")
     until_date: datetime = Field(None, title="Timestamp for when Application Ownership validity ends")
@@ -127,8 +131,8 @@ class ApplicationOwnership(BaseModel):
 class GroupClaim(BaseModel):
 
     group_id: uuid.UUID = Field(None, title="Unique identifier for Group")
-    claim_id: uuid.UUID = Field(None, title="Unique identifier for a claim")
-    application_id: uuid.UUID = Field(None, title="Unique identifier for a claim")
+    claim_id: uuid.UUID = Field(None, title=CLAIM_ID)
+    application_id: uuid.UUID = Field(None, title=APPLICATION_ID)
 
 
 # -----------------------------------------------------------------------------
@@ -136,9 +140,9 @@ class GroupClaim(BaseModel):
 # -----------------------------------------------------------------------------
 class IdentityClaim(BaseModel):
 
-    claim_id: uuid.UUID = Field(None, title="Unique identifier for a claim")
-    application_id: uuid.UUID = Field(None, title="Unique identifier for an application")
-    identity_id: uuid.UUID = Field(None, title="Unique identifier for an identity")
+    claim_id: uuid.UUID = Field(None, title=CLAIM_ID)
+    application_id: uuid.UUID = Field(None, title=APPLICATION_ID)
+    identity_id: uuid.UUID = Field(None, title=IDENTITY_ID)
     from_date: datetime = Field(None, title="Timestamp for when Identity Claim validity starts")
     until_date: datetime = Field(None, title="Timestamp for when Identity Claim validity ends")
 
@@ -150,7 +154,7 @@ class IdentityGroup(BaseModel):
 
     group_id: uuid.UUID = Field(None, title="Unique identifier for Group")
     application_id: uuid.UUID = Field(None, title="Unique identifier for an applications")
-    identity_id: uuid.UUID = Field(None, title="Unique identifier for an identity")
+    identity_id: uuid.UUID = Field(None, title=IDENTITY_ID)
 
 
 # -----------------------------------------------------------------------------
@@ -158,6 +162,6 @@ class IdentityGroup(BaseModel):
 # -----------------------------------------------------------------------------
 class Profile(BaseModel):
 
-    identity_id: uuid.UUID = Field(None, title="Unique identifier for an identity")
-    application_id: uuid.UUID = Field(None, title="Unique identifier for an application")
+    identity_id: uuid.UUID = Field(None, title=IDENTITY_ID)
+    application_id: uuid.UUID = Field(None, title=APPLICATION_ID)
     profile_data: dict = Field(None, title="Additional information for a profile")
