@@ -14,7 +14,7 @@ models.Base.metadata.create_all(bind=engine)
 # APPLICATION OBJECT
 # -----------------------------------------------------------------------------
 app = FastAPI(
-    title="Heimdall Identity Server API",
+    title="AppSec Class Example Project",
     description="An identity management microservice written in Python and Cloud Native",
     version="1.0.0",
     openapi_url="/api/openapi.json",
