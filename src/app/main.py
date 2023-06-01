@@ -19,13 +19,15 @@ app = FastAPI(
     version="1.0.0",
     openapi_url="/api/openapi.json",
     docs_url="/api/docs",
-    redoc_url=None
+    redoc_url=None,
 )
 
 
 @app.middleware("http")
 async def db_session_middleware(request: Request, call_next):
-    response = Response("Cannot establish connection with persistence provider", status_code=500)
+    response = Response(
+        "Cannot establish connection with persistence provider", status_code=500
+    )
     try:
         request.state.db = SessionLocal()
         response = await call_next(request)
@@ -37,9 +39,7 @@ async def db_session_middleware(request: Request, call_next):
 # -----------------------------------------------------------------------------
 # CORS RULES
 # -----------------------------------------------------------------------------
-origins = [
-    "*"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -54,5 +54,3 @@ app.add_middleware(
 # -----------------------------------------------------------------------------
 app.include_router(sample.router, prefix="/api/v1")
 app.include_router(application.router, prefix="/api/v1")
-
-

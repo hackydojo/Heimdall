@@ -7,9 +7,11 @@ import uuid
 # GET CLAIM PROVIDER
 # -----------------------------------------------------------------------------
 def get_claim_provider_by_id(db: Session, provider_id: uuid.uuid4()):
-    return db.query(models.IsxClaimProvider)\
-        .filter(models.IsxClaimProvider.provider_id == str(provider_id))\
+    return (
+        db.query(models.IsxClaimProvider)
+        .filter(models.IsxClaimProvider.provider_id == str(provider_id))
         .first()
+    )
 
 
 # -----------------------------------------------------------------------------
@@ -37,9 +39,11 @@ def create_claim_provider(db: Session, role: schemas.ClaimProvider):
 # -----------------------------------------------------------------------------
 def update_claim_provider(provider_id: str, db: Session, role: schemas.ClaimProvider):
     role_dict: dict = role.dict()
-    role = db.query(models.IsxClaimProvider)\
-        .filter(models.IsxClaimProvider.provider_id == uuid.uuid4(provider_id))\
+    role = (
+        db.query(models.IsxClaimProvider)
+        .filter(models.IsxClaimProvider.provider_id == uuid.uuid4(provider_id))
         .first()
+    )
     if role:
         for key in role_dict.keys():
             if role_dict.get(key):
@@ -52,5 +56,7 @@ def update_claim_provider(provider_id: str, db: Session, role: schemas.ClaimProv
 # -----------------------------------------------------------------------------
 # SOFT DELETE CLAIM PROVIDER
 # -----------------------------------------------------------------------------
-def soft_delete_claim_provider(provider_id: str, db: Session, role: schemas.ClaimProvider):
+def soft_delete_claim_provider(
+    provider_id: str, db: Session, role: schemas.ClaimProvider
+):
     pass
