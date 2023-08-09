@@ -4,9 +4,11 @@ import uuid
 
 
 def get_application_by_id(db: Session, application_id: uuid.UUID):
-    return db.query(models.IsxApplication)\
-        .filter(models.IsxApplication.application_id == str(application_id))\
+    return (
+        db.query(models.IsxApplication)
+        .filter(models.IsxApplication.application_id == str(application_id))
         .first()
+    )
 
 
 # ---------------------------------------------------------------------------------------
@@ -14,13 +16,11 @@ def get_application_by_id(db: Session, application_id: uuid.UUID):
 # ---------------------------------------------------------------------------------------
 def get_applications(db: Session, skip: int = 0, limit: int = 100, **kwargs):
     query = db.query(models.IsxApplication)
-    if 'is_enabled' in kwargs and kwargs.get('is_enabled') is not None:
+    if "is_enabled" in kwargs and kwargs.get("is_enabled") is not None:
         enabled = False
-        if kwargs.get('is_enabled').lower() == 'true':
+        if kwargs.get("is_enabled").lower() == "true":
             enabled = True
-        query = query.filter(
-            models.IsxApplication.is_enabled == enabled
-        )
+        query = query.filter(models.IsxApplication.is_enabled == enabled)
     return query.offset(skip).limit(limit).all()
 
 
@@ -41,9 +41,11 @@ def create_application(db: Session, role: schemas.Application):
 # -----------------------------------------------------------------------------
 def update_application(application_id: str, db: Session, role: schemas.Application):
     role_dict: dict = role.dict()
-    role = db.query(models.IsxApplication)\
-        .filter(models.IsxApplication.id == uuid.uuid4(application_id))\
+    role = (
+        db.query(models.IsxApplication)
+        .filter(models.IsxApplication.id == uuid.uuid4(application_id))
         .first()
+    )
     if role:
         for key in role_dict.keys():
             if role_dict.get(key):
@@ -56,8 +58,14 @@ def update_application(application_id: str, db: Session, role: schemas.Applicati
 # -----------------------------------------------------------------------------
 # SOFT DELETE APPLICATION
 # -----------------------------------------------------------------------------
-def soft_delete_application(application_id: str, db: Session, role: schemas.Application):
-    role = db.query(models.IsxApplication).filter(models.IsxApplication.id == uuid.uuid4(application_id)).first()
+def soft_delete_application(
+    application_id: str, db: Session, role: schemas.Application
+):
+    role = (
+        db.query(models.IsxApplication)
+        .filter(models.IsxApplication.id == uuid.uuid4(application_id))
+        .first()
+    )
     if role:
         setattr(role, "is_soft_deleted", True)
         db.commit()
